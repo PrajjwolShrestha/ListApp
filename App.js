@@ -1,21 +1,50 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React , {Component} from 'react';
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+//create an app as a class
+//export class and mark it as default 
+
+export default class App extends Component{
+  //render function is the main component inside the class
+  render(){
+    return(
+      <SafeAreaView>
+
+      </SafeAreaView>
+    ) //returns view in brackets
+  }
 }
 
+//create a stylesheet
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  main: {
+    paddingHorizontal:10,
+  }
+})
+//stylesheet end
+
+
+
+
+//Notes here---------------------------
+
+/*
+
+import safe area view
+
+- reating an app where people can view list of data of something
+- to implement that we need to add flatlist component
+- have a look at the website
+
+- flatlist has a function render item
+- it also has component called item
+- create a component first
+- for that create a folder component
+- inside that create js file named as Item.js
+
+
+
+*/ 
+
+//End of Notes ------------------------
