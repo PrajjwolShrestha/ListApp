@@ -1,50 +1,92 @@
 import { StatusBar } from 'expo-status-bar';
 import React , {Component} from 'react';
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, FlatList, TextInput, Button, TouchableOpacity } from 'react-native';
 
-//create an app as a class
-//export class and mark it as default 
+import {Item} from './components/Item';
 
-export default class App extends Component{
-  //render function is the main component inside the class
-  render(){
-    return(
-      <SafeAreaView>
+export default class App extends Component {
+  state = {
+    expenseAmount : 0,
+    expenseCategory: '',
+    updating: false,
+  }
+  listData = []
 
+  render() {
+    return (
+      <SafeAreaView >
+        <View style={styles.main}>
+        <Text>Add your expense</Text>
+        <TextInput 
+          style={styles.input}
+          placeholder="$ amount" 
+          onChangeText={ text => this.setState({expenseAmount: parseFloat(text) }) } 
+          keyboardType="number-pad" />
+        <TextInput
+          style={styles.input}
+          placeholder="category"
+          onChangeText={ text => this.setState({ expenseCategory: text }) }
+        />
+        </View>
+        {/* wrap the button in view */}
+        <View>
+          <TouchableOpacity  style={styles.button} onPress= {this.addItem}>
+            <Text style={styles.buttonText} >Add</Text>
+          </TouchableOpacity>
+        </View>
+        
+        
+        <FlatList 
+          data = {this.listData}
+          renderItem = { this.renderList }
+          keyExtractor = { item => item.id }
+          extraData = {this.state.expenseAmount}
+        />
       </SafeAreaView>
-    ) //returns view in brackets
+    )
+  }
+  renderList = ({item}) => (
+    <Item amount={item.amount} category={item.category} />
+  )
+  addItem = () => {
+    if( 
+      isNaN(this.state.expenseAmount) || 
+      this.state.expenseAmount == 0 || 
+      this.state.expenseCategory == '' ) {
+      return;
+    }
+    let itemId = new Date().getTime().toString()
+    let listItem = {
+      id: itemId,
+      amount: this.state.expenseAmount,
+      category: this.state.expenseCategory
+    }
+    this.listData.push(listItem)
+    console.log('adding')
+    // this.setState({updating: true})
+    this.setState({expenseAmount:0})
   }
 }
-
-//create a stylesheet
+const colors = {
+  primary : 'hsla(330, 38%, 65%, 1)'
+}
 const styles = StyleSheet.create({
   main: {
-    paddingHorizontal:10,
+    paddingHorizontal: 10,
+  },
+  input: {
+    width: '100%',
+    padding: 10,
+    borderColor: 'black',
+    borderWidth: 1,
+    marginVertical: 15
+  },
+  button: {
+    padding: 15,
+    backgroundColor: colors.primary
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center'
   }
 })
-//stylesheet end
-
-
-
-
-//Notes here---------------------------
-
-/*
-
-import safe area view
-
-- reating an app where people can view list of data of something
-- to implement that we need to add flatlist component
-- have a look at the website
-
-- flatlist has a function render item
-- it also has component called item
-- create a component first
-- for that create a folder component
-- inside that create js file named as Item.js
-
-
-
-*/ 
-
-//End of Notes ------------------------
