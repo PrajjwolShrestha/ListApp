@@ -27,7 +27,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <SafeAreaView >
+      <SafeAreaView style={{flex:1}} >
         <View style={styles.main}>
         <Text>Add your expense</Text>
         <TextInput 
@@ -73,13 +73,14 @@ export default class App extends Component {
 
 
         
-        
+        <View style={{flex:1}}>
         <FlatList 
           data = {this.listData}
           renderItem = { this.renderList }
           keyExtractor = { item => item.id }
           extraData = {this.state.expenseAmount}
         />
+        </View>
       </SafeAreaView>
     )
   }
@@ -100,6 +101,10 @@ export default class App extends Component {
       category: this.state.expenseCategory
     }
     this.listData.push(listItem)
+
+    //sort list in descending order
+    this.sortList()
+    
     console.log('adding')
     // this.setState({updating: true})
     this.setState({expenseAmount:0,expenseCategory:null, validInput: false})
@@ -112,6 +117,16 @@ export default class App extends Component {
       this.setState({validInput:true})
     }
   }
+
+  sortList = () => {
+    this.listData.sort((item1,item2) => {
+      //compare the item
+      //item uses an id that is based on timestamp
+      //works with negetive value
+      return item2.id - item1.id
+    })
+  }
+
 }
 const colors = {
   primary : 'hsla(330, 38%, 65%, 1)',
