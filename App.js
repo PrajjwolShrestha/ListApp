@@ -13,6 +13,7 @@ export default class App extends Component {
     expenseCategory: '',
     validInput: false,
     showToast: false, //set it to false by default
+    message:''
     }
   listData = []
 
@@ -28,7 +29,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <SafeAreaView style={{flex:1}} >
+      <SafeAreaView style={{flex:1,position:'relative'}} >
         <View style={styles.main}>
         <Text>Add your expense</Text>
         <TextInput 
@@ -72,8 +73,11 @@ export default class App extends Component {
           </TouchableOpacity>
         </View>
 
-        <View>
-          <Text>Item Deleted</Text>
+        <View style={[{
+          display: this.state.showToast ? 'flex' : 'none'
+          
+        },styles.toast]}>
+          <Text style={styles.toastMessage}>{this.state.message}</Text>
         </View>
 
 
@@ -112,6 +116,7 @@ export default class App extends Component {
         this.listData.splice( index,1)
       }
     })
+    this.showToast('Item deleted','2000')
     this.saveList()
     this.setState({expenseAmount:0})
   }
@@ -142,6 +147,7 @@ export default class App extends Component {
     this.setState({expenseAmount:0,expenseCategory:null, validInput: false})
     this._textInput.clear()
     this._textInput.focus()
+    this.showToast('Item added','1500')
   }
 
   validate = () => {
@@ -191,6 +197,13 @@ export default class App extends Component {
     }
   }
 
+  //show toast
+  showToast = (message,duration) => {
+    this.setState({message: message}, ()=>{this.setState({showToast:true})})
+    const timer = setTimeout( () => {this.setState({showToast: false})},
+    duration)
+  }
+
 }
 const colors = {
   primary : 'hsla(330, 38%, 65%, 1)',
@@ -226,6 +239,20 @@ const styles = StyleSheet.create({
     padding:15,
     backgroundColor:colors.primaryDisabled,
     marginVertical: 15
+  },
+  toast:{
+    backgroundColor:'white',
+    maxWidth:200,
+    position:'absolute',
+    bottom:20,
+    left:20,
+    right:20,
+    padding:5,
+    borderRadius:5,
+  },
+  toastMessage:{
+    color:'red',
+    textAlign:'center',
   }
 })
 
