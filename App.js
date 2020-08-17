@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React , {Component} from 'react';
-import { StyleSheet, Text, View, SafeAreaView, FlatList, TextInput, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, FlatList, TextInput, Button, TouchableOpacity,AsyncStorage,} from 'react-native';
 
 //third party components
 import RNPickerSelect from 'react-native-picker-select'; 
@@ -12,6 +12,7 @@ export default class App extends Component {
     expenseAmount : 0,
     expenseCategory: '',
     validInput: false,
+    showToast: false, //set it to false by default
     }
   listData = []
 
@@ -71,6 +72,10 @@ export default class App extends Component {
           </TouchableOpacity>
         </View>
 
+        <View>
+          <Text>Item Deleted</Text>
+        </View>
+
 
         
         <View style={{flex:1}}>
@@ -84,9 +89,33 @@ export default class App extends Component {
       </SafeAreaView>
     )
   }
+
+  //component mount
+  componentDidMount(){
+    this.loadList()
+  }
+
+  //render list
   renderList = ({item}) => (
-    <Item amount={item.amount} category={item.category} />
+    <Item 
+      amount={item.amount} 
+      category={item.category}  
+      id = {item.id} 
+      delete = {this.removeItem }
+    />
   )
+
+
+  removeItem = (itemId) => {
+    this.listData.forEach( (item, index) => {
+      if(item.id == itemId){
+        this.listData.splice( index,1)
+      }
+    })
+    this.saveList()
+    this.setState({expenseAmount:0})
+  }
+
   addItem = () => {
     if( 
       isNaN(this.state.expenseAmount) || 
@@ -104,6 +133,9 @@ export default class App extends Component {
 
     //sort list in descending order
     this.sortList()
+
+    //save
+    this.saveList()
     
     console.log('adding')
     // this.setState({updating: true})
@@ -125,6 +157,38 @@ export default class App extends Component {
       //works with negetive value
       return item2.id - item1.id
     })
+  }
+
+  //save the list
+  saveList = async () => {
+    try{
+      await AsyncStorage.setItem(
+        //key
+        'data',
+        //value - data we want to store
+        JSON.stringify(this.listData) //set data and store value from list data after it converts from string
+
+      )
+    }
+    catch( error ){
+      //Do something with an error
+      console.log(error)
+    }
+
+  }
+
+  //load the list
+  loadList = async () => {
+    try{
+      let items = await AsyncStorage.getItem('data')
+      if(JSON.parse(items)){
+        this.listData = JSON.parse(items)
+      }
+      this.setState({expenseAmount:0})
+    }
+    catch(error){
+      console.log(error)
+    }
   }
 
 }
