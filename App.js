@@ -18,15 +18,15 @@ import {styles} from './styles/Main';
 import {pickerStyle} from './styles/Picker';
 
 const pickerPlaceholder = {
-  label: 'select a category',
+  label: 'select status',
   value: null,
   color: 'black',
 }
 
 export default class App extends Component {
   state = {
-    expenseAmount: 0,
-    expenseCategory: '',
+    activityItem: 0,
+    activityStatus: '',
     validInput: false,
     showToast: false,
     message: '',
@@ -34,23 +34,22 @@ export default class App extends Component {
   listData = []
 
   dropdownItems = [
-    { label: 'Food', value: 'food' },
-    { label: 'Transport', value: 'transport' },
-    { label: 'Rent', value: 'rent' },
-    { label: 'Grocery', value: 'grocery' },
-    { label: 'Entertainment', value: 'entertainment' },
+    { label: 'Done', value: 'done' },
+    { label: 'NotDone', value: 'notDone' },
+    
   ]
 
   render() {
     return (
       <SafeAreaView style={{flex:1, position: 'relative'}}>
         <View style={styles.main}>
-          <Text>Add your expense</Text>
+          <Text>Add Todo activities</Text>
+          
           <TextInput
             style={styles.input}
-            placeholder="$ amount"
+            placeholder="Todo Activity"
             onChangeText={(text) =>
-              this.setState({ expenseAmount: parseFloat(text) }, () => {
+              this.setState({ activityItem: parseFloat(text) }, () => {
                 this.validate()
               })
             }
@@ -59,9 +58,9 @@ export default class App extends Component {
           />
           <RNPickerSelect
             items={this.dropdownItems}
-            value={this.state.expenseCategory}
+            value={this.state.activityStatus}
             onValueChange={(value) =>
-              this.setState({ expenseCategory: value }, () => {
+              this.setState({ activityStatus: value }, () => {
                 this.validate()
               })
             }
@@ -95,7 +94,7 @@ export default class App extends Component {
             data={this.listData}
             renderItem={this.renderList}
             keyExtractor={(item) => item.id}
-            extraData={this.state.expenseAmount}
+            extraData={this.state.activityItem}
           />
         </View>
       </SafeAreaView>
@@ -108,8 +107,8 @@ export default class App extends Component {
 
   renderList = ({ item }) => (
     <Item 
-      amount={item.amount} 
-      category={item.category} 
+      activity={item.activity} 
+      status={item.status} 
       id={item.id} 
       delete={ this.removeItem }
     />
@@ -123,30 +122,30 @@ export default class App extends Component {
     } )
     this.showToast('item deleted', 2000 )
     this.saveList()
-    this.setState({expenseAmount:0})
+    this.setState({activityItem:0})
   }
 
   addItem = () => {
     if (
-      isNaN(this.state.expenseAmount) ||
-      this.state.expenseAmount == 0 ||
-      this.state.expenseCategory == ''
+      isNaN(this.state.activityItem) ||
+      this.state.activityItem == 0 ||
+      this.state.activityStatus == ''
     ) {
       return
     }
     let itemId = new Date().getTime().toString()
     let listItem = {
       id: itemId,
-      amount: this.state.expenseAmount,
-      category: this.state.expenseCategory,
+      activity: this.state.activityItem,
+      status: this.state.activityStatus,
     }
     this.listData.push(listItem)
     // sort list in descending order
     this.sortList()
     this.saveList()
     this.setState({
-      expenseAmount: 0,
-      expenseCategory: null,
+      activityItem: 0,
+      activityStatus: null,
       validInput: false,
     })
     this._textInput.clear()
@@ -155,7 +154,7 @@ export default class App extends Component {
   }
 
   validate = () => {
-    if (this.state.expenseAmount > 0 && this.state.expenseCategory) {
+    if (this.state.activityItem > 0 && this.state.activityStatus) {
       this.setState({ validInput: true })
     }
   }
@@ -184,7 +183,7 @@ export default class App extends Component {
       if( JSON.parse(items) ) {
         this.listData = JSON.parse( items )
       }
-      this.setState({expenseAmount:0})
+      this.setState({activityItem:0})
     }
     catch(error) {
       console.log(error)
