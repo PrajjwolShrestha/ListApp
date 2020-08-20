@@ -3,14 +3,20 @@ import {colors} from './Colors';
 
 export const itemStyles = StyleSheet.create({
   item : {
-    padding: 10,
+    padding: 20,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   text: {
-    fontSize: 16,
-    color: 'black'
+    fontSize: 18,
+    color: 'black',
+    flex:1,
+    paddingLeft:10,
+    paddingRight:10,
+    borderWidth:1,
+    borderColor:'black',
+    backgroundColor:'lightgreen'
   },
   row: {
     flexDirection: 'row',

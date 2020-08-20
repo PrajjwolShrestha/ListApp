@@ -5,11 +5,11 @@ export const pickerStyle = StyleSheet.create({
   inputIOS: {
     padding: 10,
     borderColor: colors.primary,
-    borderWidth: 1,
+    borderWidth: 2,
   },
   inputAndroid: {
     padding: 10,
     borderColor: colors.primary,
-    borderWidth: 1,
+    borderWidth: 2,
   },
 })

@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     padding: 10,
     borderColor: colors.primary,
-    borderWidth: 1,
+    borderWidth: 2,
     marginVertical: 15,
   },
   buttonView: {
@@ -25,6 +25,7 @@ export const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     textAlign: 'center',
+    fontSize:30
   },
   buttonDisabled: {
     padding: 15,
@@ -35,7 +36,7 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   toast: {
-    backgroundColor: 'black',
+    backgroundColor: 'lightgreen',
     position: 'absolute',
     bottom: 20,
     left: 20,
@@ -44,7 +45,7 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
   },
   toastMessage: {
-    color: 'white',
+    color: 'black',
     textAlign: 'center',
   },
 })

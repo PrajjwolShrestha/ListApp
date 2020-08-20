@@ -18,9 +18,10 @@ import {styles} from './styles/Main';
 import {pickerStyle} from './styles/Picker';
 
 const pickerPlaceholder = {
-  label: 'select status',
+  label: 'Select status',
   value: null,
   color: 'black',
+  
 }
 
 export default class App extends Component {
@@ -35,8 +36,8 @@ export default class App extends Component {
   listData = []
 
   dropdownItems = [
-    { label: 'Done', value: 'done' },
-    { label: 'NotDone', value: 'notDone' },
+    { label: 'Done', value: 'Done' },
+    { label: 'Not Done', value: 'Not Done' },
     
   ]
 
@@ -49,12 +50,7 @@ export default class App extends Component {
           <TextInput
             style={styles.input}
             placeholder="Todo Activity"
-            //onChangeText={(text) =>
-              //this.setState({ activityItem: parseFloat(text) }, () => {
-                //this.validate()
-              //})
-            //}
-            //keyboardType="number-pad"
+            
 
             //-------------------------
             
@@ -134,7 +130,7 @@ export default class App extends Component {
         this.listData.splice( index, 1 )
       }
     } )
-    this.showToast('item deleted', 2000 )
+    this.showToast('Activity deleted', 2000 )
     this.saveList()
     this.setState({activityItem:0})
   }
@@ -148,7 +144,7 @@ export default class App extends Component {
       this.state.activityItem == '' ||
       this.state.activityStatus == '' 
     ) {
-      this.showToast('item could not be added',2000)
+      this.showToast('Activity could not be added',2000)
       return
     }
     let itemId = new Date().getTime().toString()

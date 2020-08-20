@@ -13,6 +13,8 @@ const styles = StyleSheet.create({
   bar: {
     minHeight: 30,
     paddingHorizontal: 10,
-    paddingVertical: 15
+    paddingVertical: 15,
+    
+
   }
 })
