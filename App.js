@@ -25,7 +25,8 @@ const pickerPlaceholder = {
 
 export default class App extends Component {
   state = {
-    activityItem: 0,
+    //activityItem: 0,
+    activityItem:'',
     activityStatus: '',
     validInput: false,
     showToast: false,
@@ -48,12 +49,22 @@ export default class App extends Component {
           <TextInput
             style={styles.input}
             placeholder="Todo Activity"
-            onChangeText={(text) =>
-              this.setState({ activityItem: parseFloat(text) }, () => {
+            //onChangeText={(text) =>
+              //this.setState({ activityItem: parseFloat(text) }, () => {
+                //this.validate()
+              //})
+            //}
+            //keyboardType="number-pad"
+
+            //-------------------------
+            
+            onChangeText={ text =>
+              this.setState({ activityItem: text }, () => {
                 this.validate()
               })
             }
-            keyboardType="number-pad"
+            
+            //-------------------------
             ref={(input) => (this._textInput = input)}
           />
           <RNPickerSelect
@@ -84,11 +95,13 @@ export default class App extends Component {
             <Text style={styles.buttonText}>Add</Text>
           </TouchableOpacity>
         </View>
+
         <View style={[{
           display: this.state.showToast ? 'flex' : 'none'
         }, styles.toast ]}>
           <Text style={styles.toastMessage}>{this.state.message}</Text>
         </View>
+
         <View style={{flex:1}}>
           <FlatList
             data={this.listData}
@@ -114,6 +127,7 @@ export default class App extends Component {
     />
   )
 
+  //------------------------------------------------------
   removeItem = (itemId) => {
     this.listData.forEach( (item,index) => {
       if (item.id == itemId) {
@@ -124,13 +138,17 @@ export default class App extends Component {
     this.saveList()
     this.setState({activityItem:0})
   }
+  //------------------------------------------------------
+
 
   addItem = () => {
     if (
-      isNaN(this.state.activityItem) ||
+      //isNaN(this.state.activityItem) ||
       this.state.activityItem == 0 ||
-      this.state.activityStatus == ''
+      this.state.activityItem == '' ||
+      this.state.activityStatus == '' 
     ) {
+      this.showToast('item could not be added',2000)
       return
     }
     let itemId = new Date().getTime().toString()
@@ -144,17 +162,18 @@ export default class App extends Component {
     this.sortList()
     this.saveList()
     this.setState({
-      activityItem: 0,
+      //activityItem: 0,
+      activityItem:'',
       activityStatus: null,
       validInput: false,
     })
     this._textInput.clear()
     this._textInput.focus()
-    this.showToast('item added', 1500 )
+    this.showToast('New Todo Activity Added', 1500 )
   }
 
   validate = () => {
-    if (this.state.activityItem > 0 && this.state.activityStatus) {
+    if (this.state.activityItem  && this.state.activityStatus) {
       this.setState({ validInput: true })
     }
   }
@@ -169,7 +188,8 @@ export default class App extends Component {
     try {
       await AsyncStorage.setItem(
         'data',
-        JSON.stringify(this.listData)
+        JSON.stringify(this.listData),
+        console.log('item added')
       )
     }
     catch( error ) {
