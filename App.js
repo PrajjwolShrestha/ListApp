@@ -17,6 +17,8 @@ import { Item } from './components/Item'
 import {styles} from './styles/Main';
 import {pickerStyle} from './styles/Picker';
 
+
+//placeholder of the picker
 const pickerPlaceholder = {
   label: 'Select status',
   value: null,
@@ -24,23 +26,26 @@ const pickerPlaceholder = {
   
 }
 
+//using the class and this class extends Component
 export default class App extends Component {
+  //set initial state for different props
   state = {
-    //activityItem: 0,
     activityItem:'',
     activityStatus: '',
     validInput: false,
     showToast: false,
     message: '',
   }
-  listData = []
+  listData = [] //array
 
+  //dropdown list items contains key ,value
   dropdownItems = [
     { label: 'Done', value: 'Done' },
     { label: 'Not Done', value: 'Not Done' },
     
   ]
 
+  //render function that returns  views
   render() {
     return (
       <SafeAreaView style={{flex:1, position: 'relative'}}>
@@ -63,7 +68,8 @@ export default class App extends Component {
             //-------------------------
             ref={(input) => (this._textInput = input)}
           />
-          <RNPickerSelect
+          
+          <RNPickerSelect 
             items={this.dropdownItems}
             value={this.state.activityStatus}
             onValueChange={(value) =>
@@ -75,6 +81,7 @@ export default class App extends Component {
             style={pickerStyle}
             placeholder={pickerPlaceholder}
           />
+          
         </View>
         {/* wrap the button in view */}
         <View style={styles.buttonView}>
@@ -85,7 +92,7 @@ export default class App extends Component {
                 {borderRadius: 10}
               ]
             }
-            onPress={this.addItem}
+            onPress={this.addItem} //add item to the listData when button is pressed
             disabled={!this.state.validInput ? true : false}
           >
             <Text style={styles.buttonText}>Add</Text>
@@ -95,7 +102,7 @@ export default class App extends Component {
         <View style={[{
           display: this.state.showToast ? 'flex' : 'none'
         }, styles.toast ]}>
-          <Text style={styles.toastMessage}>{this.state.message}</Text>
+          <Text style={styles.toastMessage}>{this.state.message}</Text>  
         </View>
 
         <View style={{flex:1}}>
@@ -110,10 +117,12 @@ export default class App extends Component {
     )
   }
 
+  //function to load the list of data
   componentDidMount() {
     this.loadList()
   }
 
+  //render the list
   renderList = ({ item }) => (
     <Item 
       activity={item.activity} 
@@ -124,6 +133,9 @@ export default class App extends Component {
   )
 
   //------------------------------------------------------
+
+  //delete activities from the list
+
   removeItem = (itemId) => {
     this.listData.forEach( (item,index) => {
       if (item.id == itemId) {
@@ -136,7 +148,8 @@ export default class App extends Component {
   }
   //------------------------------------------------------
 
-
+  
+  //add item to the list Data 
   addItem = () => {
     if (
       //isNaN(this.state.activityItem) ||
@@ -163,23 +176,27 @@ export default class App extends Component {
       activityStatus: null,
       validInput: false,
     })
-    this._textInput.clear()
-    this._textInput.focus()
-    this.showToast('New Todo Activity Added', 1500 )
+    this._textInput.clear() //clears the textinput
+    this._textInput.focus() //set focus after the text has been cleared
+    this.showToast('New Todo Activity Added', 1500 ) //display the message 
   }
 
+  //function to validate the inputs
   validate = () => {
     if (this.state.activityItem  && this.state.activityStatus) {
       this.setState({ validInput: true })
     }
   }
 
+  //sort list based on recently added data in the list
+  //one that is added recently display first
   sortList = () => {
     this.listData.sort( (item1,item2) => {
       return item2.id - item1.id
     } )
   }
 
+  //async storage saves data locally
   saveList = async () => {
     try {
       await AsyncStorage.setItem(
@@ -189,10 +206,11 @@ export default class App extends Component {
       )
     }
     catch( error ) {
-      console.log(error)
+      console.log(error) //error message if saving is not successful
     }
   }
 
+  //load the aync data using JSON
   loadList = async () => {
     try{
       let items = await AsyncStorage.getItem('data')
@@ -206,6 +224,7 @@ export default class App extends Component {
     }
   }
 
+  //show toast message
   showToast = ( message, duration ) => {
     this.setState({message: message }, 
       () => { this.setState({showToast: true}) }
